@@ -8,4 +8,8 @@ const UserSchema = new Schema({
    password: {type: String, required: true},
 });
 
+UserSchema.virtual("user").get(function () {
+   return this.username;
+});
+
 module.exports = mongoose.model("User", UserSchema);
