@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const { body, validationResult } = require('express-validator');
 
-// Create new user on GET
+// Show sign up page on GET
 exports.user_create_get = async (req, res, next) => {
     res.render('register', {title: 'Account Registration'});
 };
@@ -38,5 +38,19 @@ exports.user_create_post = [
             email: req.body.email,
             password: req.body.password,
         });
+
+        // Rerender form if there are errors.
+        if (!errors.isEmpty()) {
+            res.render('register', {
+                title: 'Account Registration',
+                user,
+                errors: errors.array(),
+            });
+        }
+
+        // Otherwise, data in form is valid, user is saved in database.
+        // Redirect to main app.
+        await user.save();
+        res.redirect('/');
     }
 ];
